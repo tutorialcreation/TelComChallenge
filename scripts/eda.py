@@ -377,6 +377,18 @@ class EDA:
                 return self.df.groupby(['decile_rank']).sum()
         return
 
-    
+
+    def map_index_to_feature(self,index,features):
+        """
+        purpose:
+            - generates transformations for the data
+        input:
+            - string,int and df
+        returns:
+            - transformation
+        """
+        for i,x in enumerate(features):
+            if i == index:
+                return x
 
    
