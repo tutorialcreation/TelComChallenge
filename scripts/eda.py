@@ -104,7 +104,7 @@ class EDA:
 
 
     
-    def generate_transformation(self,pipeline,df,type_,value):
+    def generate_transformation(self,pipeline,type_,value):
         """
         purpose:
             - generates transformations for the data
@@ -137,9 +137,17 @@ class EDA:
 
     
 
-    def split_data(self,df,response_variable,split_ratio,get):
-        X = df.drop(response_variable, axis=1)
-        y = df[response_variable]
+    def split_data(self,response_variable,split_ratio,get):
+        """
+        purpose:
+            - splits the dataset into manageable portions
+        input:
+            - string,int and df
+        returns:
+            - df
+        """
+        X = self.df.drop(response_variable, axis=1)
+        y = self.df[response_variable]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split_ratio, 
                                                         random_state=1121218)
         if get == "X_train":
