@@ -363,11 +363,20 @@ class EDA:
         return
 
     def categorize_based_on_deciles(self,df,features,x_):
+        """
+        purpose:
+            - categorizes the data based on deciles
+        input:
+            - int,list and df
+        returns:
+            - df
+        """
         for i,key in enumerate(features):
             if i==x_:
-                df['decile_rank'] = pd.qcut(df[key], 10,labels = False)
-                return df.groupby(['decile_rank']).sum()
+                self.df['decile_rank'] = pd.qcut(self.df[key], 10,labels = False)
+                return self.df.groupby(['decile_rank']).sum()
         return
 
+    
 
    
