@@ -50,13 +50,24 @@ class EDA:
     def __init__(self,df):
         """
         purpose:
-        -initialize the class
-        
+            -initialize the class
+        input:
+            - df
+        returns:
+            -df
         """
         self.df = df
 
 
     def generate_pipeline(self,type_="numeric",x=1):
+        """
+        purpose:
+            - generate_pipelines for the data
+        input:
+            - string and int
+        returns:
+            - pipeline
+        """
         pipeline = None
         if type_ == "numeric":
             pipeline = Pipeline(steps=[
@@ -76,6 +87,14 @@ class EDA:
 
     
     def store_features(self, df,type_,value):
+        """
+        purpose:
+            - generate_pipelines for the data
+        input:
+            - string and int
+        returns:
+            - pipeline
+        """
         features = [None]
         if type_ == "numeric":
             features = df.select_dtypes(include=value).columns.tolist()
