@@ -71,9 +71,10 @@ st.sidebar.subheader("Measures of dispersion")
 if st.sidebar.checkbox("find deciles"):
     try:
         analysis_type_3 = analyzer.categorize_based_on_deciles(numerical_features,numeric_variable_)
+        st.subheader("Measures of dispersion")
         st.write(analysis_type_3)
     except Exception as e:
         st.error(e)
 
-        
+
 analysis_2 = analyzer.graphical_analysis(numerical_features,"univariate","curve",x=1)
