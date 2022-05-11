@@ -168,7 +168,7 @@ class EDA:
         missing_percentage = round((self.df.isnull().sum().sum()/\
                 reduce(lambda x, y: x*y, self.df.shape))*100,2)
         for key in features:
-            self.df.fillna(self.df[key].mean().round(1), inplace=True)
+            self.df[key] = self.df[key].fillna(self.df[key].mean())
         return missing_percentage, self.df
 
     def handle_missing_values_categorical(self,features):
