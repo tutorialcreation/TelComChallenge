@@ -291,21 +291,27 @@ class EDA:
             for i,key in enumerate(features):
                 if i == x:
                     if opt == 'box':
-                        return self.df.boxplot(column=[key], grid=False, color='black')
+                        fig,ax = plt.subplots()
+                        ax.boxplot(self.df[key])
+                        return fig
                     elif opt == 'hist':
-                        return self.df.hist(column=[key], grid=False, edgecolor='black')
+                        fig,ax = plt.subplots()
+                        ax.hist(self.df[key])
+                        return fig
                     elif opt == 'curve':
-                        return sns.kdeplot(self.df[key])
+                        fig,ax = plt.subplots()
+                        ax.bar(self.df[key],height=2)
+                        return fig
         if type_ == "bivariate":
             for i,key in enumerate(features):
                 if i == x:
                     if opt == "scatter":
-                        
-                        plt.scatter(self.df[features[x]], self.df[features[y]])
-                        plt.title(f'{features[x]} vs {features[y]}')
-                        plt.xlabel(f'{features[x]}')
-                        plt.ylabel(f'{features[y]}')
-                    
+                        fig,ax = plt.subplots()
+                        ax.scatter(self.df[features[x]], self.df[features[y]])
+                        ax.set_title(f'{features[x]} vs {features[y]}')
+                        ax.set_xlabel(f'{features[x]}')
+                        ax.set_ylabel(f'{features[y]}')
+                        return fig
         
 
 
@@ -364,7 +370,7 @@ class EDA:
         """
         for i,key in enumerate(features):
             if i==x_:
-                self.df['decile_rank'] = pd.qcut(self.df[key], 10,labels = False)
+                self.df['decile_rank'] = pd.qcut(self.df[key], 10,labels = False,duplicates='drop')
                 return self.df.groupby(['decile_rank']).sum()
         return
 

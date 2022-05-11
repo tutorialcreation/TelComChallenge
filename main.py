@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from scripts.eda import EDA
+st.set_option('deprecation.showPyplotGlobalUse', False)
 
 st.title("Telecommunication User Analytics")
 st.sidebar.title("Configurations")
@@ -82,7 +83,7 @@ option = st.sidebar.radio("What type of chart would you like to see?",
 ("box","hist","curve","scatter"))
 if option:
     try:
-        analysis_type_3 = analyzer.graphical_analysis(numerical_features,type_,option,x=1)
+        analysis_type_3 = analyzer.graphical_analysis(numerical_features,type_,option,x=int(numeric_variable_))
         st.pyplot(analysis_type_3)
     except Exception as e:
         st.error(e)
