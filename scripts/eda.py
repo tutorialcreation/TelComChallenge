@@ -256,7 +256,7 @@ class EDA:
 
 
     
-    def non_graphical_analysis(self,features,type_,opt,x_=1,y_=1):
+    def non_graphical_analysis(self,features,type_,opt=None,x_=1,y_=1):
         """
         purpose:
             - generates a non graphical summary of 
