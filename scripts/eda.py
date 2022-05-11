@@ -368,7 +368,7 @@ class EDA:
         return
 
 
-    def map_index_to_feature(self,index,features):
+    def map_index_to_feature(self,variable,features):
         """
         purpose:
             - generates transformations for the data
@@ -378,8 +378,8 @@ class EDA:
             - transformation
         """
         for i,x in enumerate(features):
-            if i == index:
-                return x
+            if x == variable:
+                return i
 
 
 if __name__=="__main__":
@@ -390,6 +390,7 @@ if __name__=="__main__":
     numeric_transformation = analyzer.generate_transformation(numeric_pipeline,"numeric","number")
     numeric_df = analyzer.frame_transforms(numeric_transformation,numerical_features)
     values = analyzer.top_x_column(10,"Handset Manufacturer","purple")
+    fig,values = analyzer.top_x_column(10,"Handset Manufacturer","purple",online=True)
     values_ = analyzer.top_x_by_y_cols('Handset Manufacturer','Handset Type',3,5)
     aggregations = analyzer.aggregation_cols('MSISDN/Number','Total UL (Bytes)',True)
     analysis_1 = analyzer.non_graphical_analysis(numerical_features,"univariate",3)
@@ -397,5 +398,4 @@ if __name__=="__main__":
     analysis_3 = analyzer.non_graphical_analysis(numerical_features,"multivariate",1,4)
     analysis_4 = analyzer.pca_analysis(numerical_features,"numeric",10,49,1)
     analysis_5 = analyzer.categorize_based_on_deciles(numerical_features,49)
-    indexer = analyzer.map_index_to_feature(2,numerical_features)
-    
+    print(fig)
