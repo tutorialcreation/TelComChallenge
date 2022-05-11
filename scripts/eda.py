@@ -156,7 +156,7 @@ class EDA:
 
     
 
-    def handle_missing_values_numeric(self):
+    def handle_missing_values_numeric(self, features):
         """
         this algorithm does the following
         - remove columns with x percentage of missing values
@@ -167,12 +167,24 @@ class EDA:
         """
         missing_percentage = round((self.df.isnull().sum().sum()/\
                 reduce(lambda x, y: x*y, self.df.shape))*100,2)
-        null_cols = self.df.isnull().sum().to_dict()
-        for key,val in null_cols.items():
+        for key in features:
             self.df.fillna(self.df[key].mean().round(1), inplace=True)
         return missing_percentage, self.df
 
-    
+    def handle_missing_values_categorical(self,features):
+        """
+        this algorithm does the following
+        - remove columns with x percentage of missing values
+        - fill the missing values with the mode
+        returns:
+            - df
+            - percentage of missing values
+        """
+        missing_percentage = round((self.df.isnull().sum().sum()/\
+                reduce(lambda x, y: x*y, self.df.shape))*100,2)
+        for key in features:
+            self.df[key] = self.df[key].fillna(self.df[key].mode()[0])
+        return missing_percentage, self.df
 
    
     def top_x_column(self, x, column,color,online=False):
