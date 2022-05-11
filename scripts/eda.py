@@ -86,25 +86,33 @@ class EDA:
 
 
     
-    def store_features(self, df,type_,value):
+    def store_features(self,type_,value):
         """
         purpose:
-            - generate_pipelines for the data
+            - stores features for the data set
         input:
-            - string and int
+            - string,int,dataframe
         returns:
-            - pipeline
+            - dataframe
         """
         features = [None]
         if type_ == "numeric":
-            features = df.select_dtypes(include=value).columns.tolist()
+            features = self.df.select_dtypes(include=value).columns.tolist()
         elif type_ == "categorical":
-            features = df.select_dtypes(exclude=value).columns.tolist()
+            features = self.df.select_dtypes(exclude=value).columns.tolist()
         return features
 
 
     
     def generate_transformation(self,pipeline,df,type_,value):
+        """
+        purpose:
+            - generates transformations for the data
+        input:
+            - string,int and df
+        returns:
+            - transformation
+        """
         transformation = None
         if type_=="numeric":
             transformation=pipeline.fit_transform(df.select_dtypes(include=value))
