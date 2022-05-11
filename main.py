@@ -49,11 +49,17 @@ if type_ and numeric_variable_:
         analysis_type_1 = analyzer.non_graphical_analysis(numerical_features,type_,numeric_variable_)
     elif type_ == "bivariate":
         analysis_type_1 = analyzer.non_graphical_analysis(numerical_features,type_,numeric_variable_, numeric_variable_1_)
+    elif type_ == "multivariate":
+        analysis_type_1 = analyzer.non_graphical_analysis(numerical_features,type_,numeric_variable_, numeric_variable_1_)
     
     st.write(analysis_type_1)
 
+st.sidebar.subheader("PCA Analysis")
+components = int(st.sidebar.text_input("no. of components",10))
+component_return = int(st.sidebar.text_input("return which component",1))
+if components:
+    analysis_type_2 = analyzer.pca_analysis(numerical_features,"numeric",components,numeric_variable_,component_return)
+    st.write(analysis_type_2)
+
 analysis_2 = analyzer.graphical_analysis(numerical_features,"univariate","curve",x=1)
-analysis_3 = analyzer.non_graphical_analysis(numerical_features,"multivariate",1,4)
-analysis_4 = analyzer.pca_analysis(numerical_features,"numeric",10,49,1)
 analysis_5 = analyzer.categorize_based_on_deciles(numerical_features,49)
-indexer = analyzer.map_index_to_feature(2,numerical_features)
