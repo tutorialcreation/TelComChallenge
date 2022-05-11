@@ -194,7 +194,7 @@ class EDA:
         input:
             - string,int and df
         returns:
-            - transformation
+            - df
         """
         handsets_df = pd.DataFrame(columns = [column])
         handsets_df['type'] = self.df[column].to_list()
@@ -216,16 +216,23 @@ class EDA:
 
 
     
-    def top_x_by_y_cols(self,df,col_1,col_2,x,y):
-    
+    def top_x_by_y_cols(self,col_1,col_2,x,y):
+        """
+        purpose:
+            - gets the top y values of a x variable
+        input:
+            - string,int and df
+        returns:
+            - df
+        """
         result_df = []
-        by_manufacture = df.groupby(col_1,sort=True)
-        values = top_x_column(df,x,col_1,"purple")
+        by_manufacture = self.df.groupby(col_1,sort=True)
+        values = self.top_x_column(self.df,x,col_1,"purple")
 
 
         for manufacturer, frame in by_manufacture:
             if manufacturer in values:
-                result_df.append(frame.sort_values(by=[col_2], ascending=True)[col_2].head(5))
+                result_df.append(frame.sort_values(by=[col_2], ascending=True)[col_2].head(y))
         return result_df
         
 
