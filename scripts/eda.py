@@ -286,28 +286,29 @@ class EDA:
             result = pd.DataFrame(self.df[features].corr())
         return result
             
-
-
-  
-    # Conduct a Graphical Univariate Analysis by identifying the most suitable plotting options 
-    # for each variable and interpret your findings.
-
-    def graphical_analysis(self,df,features,type_,opt,x=1,y=1):
-        result = None
+    def graphical_analysis(self,features,type_,opt,x=1,y=1):
+        """
+        purpose:
+            - generates graphical of univariate or multivariate
+        input:
+            - string,int,list,df
+        returns:
+            - df
+        """
         if type_ == "univariate":
             for i,key in enumerate(features):
                 if i == x:
                     if opt == 'box':
-                        return df.boxplot(column=[key], grid=False, color='black')
+                        return self.df.boxplot(column=[key], grid=False, color='black')
                     elif opt == 'hist':
-                        return df.hist(column=[key], grid=False, edgecolor='black')
+                        return self.df.hist(column=[key], grid=False, edgecolor='black')
                     elif opt == 'curve':
-                        return sns.kdeplot(df[key])
+                        return sns.kdeplot(self.df[key])
         if type_ == "bivariate":
             for i,key in enumerate(features):
                 if i == x:
                     if opt == "scatter":
-                        plt.scatter(df[features[x]], df[features[y]])
+                        plt.scatter(self.df[features[x]], self.df[features[y]])
                         plt.title(f'{features[x]} vs {features[y]}')
                         plt.xlabel(f'{features[x]}')
                         plt.ylabel(f'{features[y]}')
