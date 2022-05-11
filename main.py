@@ -17,11 +17,11 @@ st.sidebar.subheader("Measures of location")
 numeric_variable= st.sidebar.selectbox('Numeric Variables (x1):',numerical_features)
 numeric_variable_ = analyzer.map_index_to_feature(numeric_variable,numerical_features)
 numeric_variable_1= st.sidebar.selectbox('Numeric Variables (x2):',numerical_features)
-numeric_variable_1_ = analyzer.map_index_to_feature(numeric_variable,numerical_features)
+numeric_variable_1_ = analyzer.map_index_to_feature(numeric_variable_1,numerical_features)
 categorical_variable = st.sidebar.selectbox('Categorical Variables (x1):',categorical_features)
 categorical_variable_ = analyzer.map_index_to_feature(categorical_variable,categorical_features)
 categorical_variable_1 = st.sidebar.selectbox('Categorical Variables (x2):',categorical_features)
-categorical_variable_1_ = analyzer.map_index_to_feature(categorical_variable,categorical_features)
+categorical_variable_1_ = analyzer.map_index_to_feature(categorical_variable_1,categorical_features)
 top_x = int(st.sidebar.text_input("top x",3))
 top_y = int(st.sidebar.text_input("top y",5))
 
@@ -41,8 +41,17 @@ if st.sidebar.checkbox("aggregate: min,max,mean based on two variables"):
         aggregations = analyzer.aggregation_cols(numeric_variable,numeric_variable_1,True)
         st.dataframe(aggregations)
 
-# if st.sidebar.radio(""):
-analysis_1 = analyzer.non_graphical_analysis(numerical_features,"univariate",3)
+type_ = st.sidebar.radio("What type of analysis will you undertake?",
+("univariate","bivariate","multivariate"))
+
+if type_ and numeric_variable_:
+    if type_ == "univariate":
+        analysis_type_1 = analyzer.non_graphical_analysis(numerical_features,type_,numeric_variable_)
+    elif type_ == "bivariate":
+        analysis_type_1 = analyzer.non_graphical_analysis(numerical_features,type_,numeric_variable_, numeric_variable_1_)
+    
+    st.write(analysis_type_1)
+
 analysis_2 = analyzer.graphical_analysis(numerical_features,"univariate","curve",x=1)
 analysis_3 = analyzer.non_graphical_analysis(numerical_features,"multivariate",1,4)
 analysis_4 = analyzer.pca_analysis(numerical_features,"numeric",10,49,1)
