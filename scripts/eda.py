@@ -256,25 +256,34 @@ class EDA:
 
 
     
-    def non_graphical_analysis(self,df,features,type_,opt,x_=1,y_=1):
+    def non_graphical_analysis(self,features,type_,opt,x_=1,y_=1):
+        """
+        purpose:
+            - generates a non graphical summary of 
+            a set of variables
+        input:
+            - string,int and df
+        returns:
+            - df
+        """
         result = None
         if type_ == "univariate":
             for i,key in enumerate(features):
                 if i == x:
-                    result = pd.DataFrame(df[key].describe())
+                    result = pd.DataFrame(self.df[key].describe())
         elif type_ == "bivariate":
             for i,key in enumerate(features):
                 if i == x_:
                     if opt=="regression":
-                        y = df[features[y_]]
-                        x = df[[key]]
+                        y = self.df[features[y_]]
+                        x = self.df[[key]]
                         x = sm.add_constant(x)
                         model = sm.OLS(y, x).fit()
                         result =  model.summary()
                     elif opt=="corr":
-                        result = pd.DataFrame(df[[key,features[y]]].corr())
+                        result = pd.DataFrame(self.df[[key,features[y]]].corr())
         elif type_ == "multivariate":
-            result = pd.DataFrame(df[features].corr())
+            result = pd.DataFrame(self.df[features].corr())
         return result
             
 
