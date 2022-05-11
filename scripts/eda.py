@@ -115,15 +115,23 @@ class EDA:
         """
         transformation = None
         if type_=="numeric":
-            transformation=pipeline.fit_transform(df.select_dtypes(include=value))
+            transformation=pipeline.fit_transform(self.df.select_dtypes(include=value))
         elif type_ == "categorical":
-            transformation=pipeline.fit_transform(df.select_dtypes(exclude=value))
+            transformation=pipeline.fit_transform(self.df.select_dtypes(exclude=value))
         return transformation
 
 
     
 
     def frame_transforms(self,transform,features):
+        """
+        purpose:
+            - merges the transform to generate a dataframe
+        input:
+            - transform and list
+        returns:
+            - df
+        """
         return pd.DataFrame(transform,columns=features)
 
 
