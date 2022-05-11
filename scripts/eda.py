@@ -3,6 +3,7 @@
 # author: Martin Luther Bironga
 # date: 5/11/2022
 import warnings
+from xml.etree.ElementInclude import include
 warnings.filterwarnings('ignore')
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -13,21 +14,13 @@ from sklearn.preprocessing import OneHotEncoder, MinMaxScaler
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
 from statistics import mean
-from pandas_profiling import ProfileReport
 import numpy as np
-import json
-import datetime
-import math
 import statsmodels.api as sm
 
-from datetime import timedelta, datetime
 
-import matplotlib.mlab as mlab
 import matplotlib
 plt.style.use('ggplot')
-from matplotlib.pyplot import figure
 
-get_ipython().run_line_magic('matplotlib', 'inline')
 matplotlib.rcParams['figure.figsize'] = (12,8)
 
 pd.options.mode.chained_assignment = None
@@ -99,7 +92,7 @@ class EDA:
 
 
     
-    def generate_transformation(self,pipeline,type_,value):
+    def generate_transformation(self,pipeline,type_,value,trim=None,key=None):
         """
         purpose:
             - generates transformations for the data
@@ -111,8 +104,12 @@ class EDA:
         transformation = None
         if type_=="numeric":
             transformation=pipeline.fit_transform(self.df.select_dtypes(include=value))
+            if trim:
+                transformation=pipeline.fit_transform(pd.DataFrame(self.split_data(key,0.3,trim)).select_dtypes(include=value))
         elif type_ == "categorical":
             transformation=pipeline.fit_transform(self.df.select_dtypes(exclude=value))
+            if trim:
+                transformation=pipeline.fit_transform(pd.DataFrame(self.split_data(key,0.3,trim)).select_dtypes(exclude=value))
         return transformation
 
 
@@ -222,7 +219,7 @@ class EDA:
         """
         result_df = []
         by_manufacture = self.df.groupby(col_1,sort=True)
-        values = self.top_x_column(self.df,x,col_1,"purple")
+        values = self.top_x_column(x,col_1,"purple")
 
 
         for manufacturer, frame in by_manufacture:
@@ -264,7 +261,7 @@ class EDA:
         result = None
         if type_ == "univariate":
             for i,key in enumerate(features):
-                if i == x:
+                if i == x_:
                     result = pd.DataFrame(self.df[key].describe())
         elif type_ == "bivariate":
             for i,key in enumerate(features):
@@ -340,16 +337,14 @@ class EDA:
         for i,key in enumerate(features):
             if i==x_:
                 train = self.generate_transformation(self.generate_pipeline(type_),
-                                            pd.DataFrame(self.split_data(self.df,key,0.3,"X_train")),
-                                            type_,"number")
+                                            type_,"number",trim="X_train",key=key)
                 test = self.generate_transformation(self.generate_pipeline(type_),
-                                                pd.DataFrame(self.split_data(self.df,key,0.3,"X_test")),
-                                                type_,"number")
+                                            type_,"number",trim="X_test",key=key)
                 pca_train_results, pca_train = self.setup_pca(train, no)
                 pca_test_results, pca_test = self.setup_pca(test, no)
                 names_pcas = [f"PCA Component {i}" for i in range(1, 11, 1)]
                 scree = pd.DataFrame(list(zip(names_pcas, pca_train.explained_variance_ratio_)), columns=["Component", "Explained Variance Ratio"])
-                df = pd.DataFrame({'PCA':pca_train.components_[component], 'Variable Names':features})            
+                df = pd.DataFrame({'PCA':pca_train.components_[component], 'Variable Names':features[:x_]})            
                 df = df.sort_values('PCA', ascending=False)
                 df2 = pd.DataFrame(df)
                 df2['PCA']=df2['PCA'].apply(np.absolute)
@@ -357,7 +352,7 @@ class EDA:
                 return df2
         return
 
-    def categorize_based_on_deciles(self,df,features,x_):
+    def categorize_based_on_deciles(self,features,x_):
         """
         purpose:
             - categorizes the data based on deciles
@@ -387,5 +382,20 @@ class EDA:
                 return x
 
 
-if __name__=='main':
-    print("<<<<EDA>>>>")
+if __name__=="__main__":
+    df = pd.read_csv("../data/telcom.csv")
+    analyzer = EDA(df)
+    numeric_pipeline = analyzer.generate_pipeline("numeric")
+    numerical_features = analyzer.store_features("numeric","number")
+    numeric_transformation = analyzer.generate_transformation(numeric_pipeline,"numeric","number")
+    numeric_df = analyzer.frame_transforms(numeric_transformation,numerical_features)
+    values = analyzer.top_x_column(10,"Handset Manufacturer","purple")
+    values_ = analyzer.top_x_by_y_cols('Handset Manufacturer','Handset Type',3,5)
+    aggregations = analyzer.aggregation_cols('MSISDN/Number','Total UL (Bytes)',True)
+    analysis_1 = analyzer.non_graphical_analysis(numerical_features,"univariate",3)
+    analysis_2 = analyzer.graphical_analysis(numerical_features,"univariate","curve",x=1)
+    analysis_3 = analyzer.non_graphical_analysis(numerical_features,"multivariate",1,4)
+    analysis_4 = analyzer.pca_analysis(numerical_features,"numeric",10,49,1)
+    analysis_5 = analyzer.categorize_based_on_deciles(numerical_features,49)
+    indexer = analyzer.map_index_to_feature(2,numerical_features)
+    
