@@ -359,7 +359,8 @@ class EDA:
                 pca_test_results, pca_test = self.setup_pca(test, no)
                 names_pcas = [f"PCA Component {i}" for i in range(1, 11, 1)]
                 scree = pd.DataFrame(list(zip(names_pcas, pca_train.explained_variance_ratio_)), columns=["Component", "Explained Variance Ratio"])
-                df = pd.DataFrame({'PCA':pca_train.components_[component], 'Variable Names':features[:x_]})            
+                d = {'PCA':pca_train.components_[component], 'Variable Names':numerical_features[:x_]}
+                df = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in d.items() ]))
                 df = df.sort_values('PCA', ascending=False)
                 df2 = pd.DataFrame(df)
                 df2['PCA']=df2['PCA'].apply(np.absolute)
