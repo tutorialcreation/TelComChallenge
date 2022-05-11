@@ -58,8 +58,11 @@ st.sidebar.subheader("PCA Analysis")
 components = int(st.sidebar.text_input("no. of components",10))
 component_return = int(st.sidebar.text_input("return which component",1))
 if components:
-    analysis_type_2 = analyzer.pca_analysis(numerical_features,"numeric",components,numeric_variable_,component_return)
-    st.write(analysis_type_2)
+    try:
+        analysis_type_2 = analyzer.pca_analysis(numerical_features,"numeric",components,numeric_variable_,component_return)
+        st.write(analysis_type_2)
+    except Exception as e:
+        st.error(e)
 
 analysis_2 = analyzer.graphical_analysis(numerical_features,"univariate","curve",x=1)
 analysis_5 = analyzer.categorize_based_on_deciles(numerical_features,49)
