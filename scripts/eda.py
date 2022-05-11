@@ -164,24 +164,26 @@ class EDA:
 
     
 
-    def handle_missing_values(self,df,x):
+    def handle_missing_values(self,x):
         """
-        this algorithm does the following
-        - remove columns with x percentage of missing values
-        - fill the missing values with the mean
+        purpose:
+            - remove columns with x percentage of missing values
+            - fill the missing values with the mean
+        input:
+            -df
         returns:
             - df
             - percentage of missing values
         """
-        missing_percentage = round((df.isnull().sum().sum()/\
-                reduce(lambda x, y: x*y, df.shape))*100,2)
-        null_cols = df.isnull().sum().to_dict()
+        missing_percentage = round((self.df.isnull().sum().sum()/\
+                reduce(lambda x, y: x*y, self.df.shape))*100,2)
+        null_cols = self.df.isnull().sum().to_dict()
         for key,val in null_cols.items():
-            if val/df.shape[0] > x:
-                df.drop([key], axis=1)
-            elif  val/df.shape[0] < x and val > 0 and df[key].dtype.kind in 'biufc':
-                df.fillna(df[key].mean().round(1), inplace=True)
-        return missing_percentage, df
+            if val/self.df.shape[0] > x:
+                self.df.drop([key], axis=1)
+            elif  val/self.df.shape[0] < x and val > 0 and self.df[key].dtype.kind in 'biufc':
+                self.df.fillna(self.df[key].mean().round(1), inplace=True)
+        return missing_percentage, self.df
 
 
    
