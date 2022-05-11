@@ -317,8 +317,15 @@ class EDA:
 
 
     
-    # pca analysis
     def setup_pca(self,data,n):
+        """
+        purpose:
+            - setting up of the data for pca analysis
+        input:
+            - int,df
+        returns:
+            - pca,df
+        """
         pca = PCA(n)
         x_ = pca.fit_transform(data)
         return x_, pca
@@ -327,6 +334,7 @@ class EDA:
 
 
     def pca_analysis(self,df,features,no,x_,component):
+        
         for i,key in enumerate(features):
             if i==x_:
                 train = generate_transformation(numeric_pipeline,
