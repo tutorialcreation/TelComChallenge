@@ -383,6 +383,19 @@ class EDA:
                 return self.df.groupby(['decile_rank']).sum()
         return
 
+    def fixing_outliers(self, column):
+        """
+        purpose: 
+            - this function removes outliers from the data
+        input:
+            - df, int
+        output:
+            - df
+        """
+        self.df[column] = np.where(self.df[column] > self.df[column].quantile(0.95), 
+                                  self.df[column].median(),self.df[column])
+        
+        return self.df[column]
 
     def map_index_to_feature(self,variable,features):
         """
@@ -415,3 +428,4 @@ if __name__=="__main__":
     analysis_4 = analyzer.pca_analysis(numerical_features,"numeric",10,49,1)
     analysis_5 = analyzer.categorize_based_on_deciles(numerical_features,49)
     print(fig)
+
