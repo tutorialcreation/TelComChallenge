@@ -238,9 +238,17 @@ class EDA:
 
 
     
-    def aggregation_cols(self,df,col_1,col_2,trim=False):
-        
-        grouped = df.groupby(col_1).agg({col_2: [min, max, mean]}) 
+    def aggregation_cols(self,col_1,col_2,trim=False):
+        """
+        purpose:
+            - returns the aggregations of two particular columns
+            for comparison purpose
+        input:
+            - string and df
+        returns:
+            - df
+        """
+        grouped = self.df.groupby(col_1).agg({col_2: [min, max, mean]}) 
         grouped.columns = ["_".join(x) for x in grouped.columns.ravel()]
         if trim:
             return grouped.describe()
