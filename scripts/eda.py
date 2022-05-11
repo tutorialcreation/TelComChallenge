@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
-
-# ## Telecom User Data Analysis
-
-# ### Libraries
-
-
+# author: Martin Luther Bironga
+# date: 5/11/2022
 import warnings
 warnings.filterwarnings('ignore')
 import matplotlib.pyplot as plt
@@ -16,7 +12,6 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import OneHotEncoder, MinMaxScaler
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
-from sklearn.compose import ColumnTransformer
 from statistics import mean
 from pandas_profiling import ProfileReport
 import numpy as np
@@ -391,4 +386,6 @@ class EDA:
             if i == index:
                 return x
 
-   
+
+if __name__=='main':
+    print("<<<<EDA>>>>")
