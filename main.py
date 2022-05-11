@@ -31,9 +31,17 @@ if top_x and categorical_variable_:
 
 if top_x and categorical_variable_ and top_y:
     values = analyzer.top_x_by_y_cols(categorical_variable,categorical_variable_1,top_x,top_y)
-    st.write(values)
+    for i in values:
+        st.dataframe([i])
 
-aggregations = analyzer.aggregation_cols('MSISDN/Number','Total UL (Bytes)',True)
+st.sidebar.subheader("Measures of Central Tendency")
+if st.sidebar.checkbox("aggregate: min,max,mean based on two variables"):
+    if numeric_variable and numeric_variable_1:
+        st.subheader("Measures of Central Tendency")
+        aggregations = analyzer.aggregation_cols(numeric_variable,numeric_variable_1,True)
+        st.dataframe(aggregations)
+
+# if st.sidebar.radio(""):
 analysis_1 = analyzer.non_graphical_analysis(numerical_features,"univariate",3)
 analysis_2 = analyzer.graphical_analysis(numerical_features,"univariate","curve",x=1)
 analysis_3 = analyzer.non_graphical_analysis(numerical_features,"multivariate",1,4)
