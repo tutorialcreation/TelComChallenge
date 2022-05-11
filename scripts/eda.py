@@ -187,9 +187,17 @@ class EDA:
 
 
    
-    def top_x_column(self,df, x, column,color,online=False):
+    def top_x_column(self, x, column,color,online=False):
+        """
+        purpose:
+            - to get the top x elements in a variable
+        input:
+            - string,int and df
+        returns:
+            - transformation
+        """
         handsets_df = pd.DataFrame(columns = [column])
-        handsets_df['type'] = df[column].to_list()
+        handsets_df['type'] = self.df[column].to_list()
         handsets = handsets_df['type'].value_counts()
         fig,ax = plt.subplots()
         ax.tick_params(axis='x',labelsize=10)
@@ -208,8 +216,8 @@ class EDA:
 
 
     
-    # Identify the top 5 handsets per top 3 handset manufacturer
     def top_x_by_y_cols(self,df,col_1,col_2,x,y):
+    
         result_df = []
         by_manufacture = df.groupby(col_1,sort=True)
         values = top_x_column(df,x,col_1,"purple")
