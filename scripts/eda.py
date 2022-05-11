@@ -333,21 +333,28 @@ class EDA:
 
 
 
-    def pca_analysis(self,df,features,no,x_,component):
-        
+    def pca_analysis(self,features,type_,no,x_,component):
+        """
+        purpose:
+            - performs a pca analysis on the data provided
+        input:
+            - string,int,list,df
+        returns:
+            - df
+        """
         for i,key in enumerate(features):
             if i==x_:
-                train = generate_transformation(numeric_pipeline,
-                                            pd.DataFrame(split_data(df,key,0.3,"X_train")),
-                                            "numeric","number")
-                test = generate_transformation(numeric_pipeline,
-                                                pd.DataFrame(split_data(df,key,0.3,"X_test")),
-                                                "numeric","number")
-                pca_train_results, pca_train = setup_pca(train, no)
-                pca_test_results, pca_test = setup_pca(test, no)
+                train = self.generate_transformation(self.generate_pipeline(type_),
+                                            pd.DataFrame(self.split_data(self.df,key,0.3,"X_train")),
+                                            type_,"number")
+                test = self.generate_transformation(self.generate_pipeline(type_),
+                                                pd.DataFrame(self.split_data(self.df,key,0.3,"X_test")),
+                                                type_,"number")
+                pca_train_results, pca_train = self.setup_pca(train, no)
+                pca_test_results, pca_test = self.setup_pca(test, no)
                 names_pcas = [f"PCA Component {i}" for i in range(1, 11, 1)]
                 scree = pd.DataFrame(list(zip(names_pcas, pca_train.explained_variance_ratio_)), columns=["Component", "Explained Variance Ratio"])
-                df = pd.DataFrame({'PCA':pca_train.components_[component], 'Variable Names':numerical_features})            
+                df = pd.DataFrame({'PCA':pca_train.components_[component], 'Variable Names':features})            
                 df = df.sort_values('PCA', ascending=False)
                 df2 = pd.DataFrame(df)
                 df2['PCA']=df2['PCA'].apply(np.absolute)
