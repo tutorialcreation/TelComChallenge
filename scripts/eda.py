@@ -300,6 +300,7 @@ class EDA:
             for i,key in enumerate(features):
                 if i == x:
                     if opt == "scatter":
+                        
                         plt.scatter(self.df[features[x]], self.df[features[y]])
                         plt.title(f'{features[x]} vs {features[y]}')
                         plt.xlabel(f'{features[x]}')
