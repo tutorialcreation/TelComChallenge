@@ -60,9 +60,20 @@ component_return = int(st.sidebar.text_input("return which component",1))
 if components:
     try:
         analysis_type_2 = analyzer.pca_analysis(numerical_features,"numeric",components,numeric_variable_,component_return)
+        st.subheader("PCA Analysis")
         st.write(analysis_type_2)
     except Exception as e:
         st.error(e)
 
+
+st.sidebar.subheader("Measures of dispersion")
+
+if st.sidebar.checkbox("find deciles"):
+    try:
+        analysis_type_3 = analyzer.categorize_based_on_deciles(numerical_features,numeric_variable_)
+        st.write(analysis_type_3)
+    except Exception as e:
+        st.error(e)
+
+        
 analysis_2 = analyzer.graphical_analysis(numerical_features,"univariate","curve",x=1)
-analysis_5 = analyzer.categorize_based_on_deciles(numerical_features,49)
