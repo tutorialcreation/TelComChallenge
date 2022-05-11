@@ -42,7 +42,17 @@ import seaborn as sns
 
 class EDA:
 
+    """
+    This program/script performs the following
+    - eda analysis of the data
+    """
+
     def __init__(self,df):
+        """
+        purpose:
+        -initialize the class
+        
+        """
         self.df = df
 
 
