@@ -7,7 +7,7 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 st.title("Telecommunication User Analytics")
 st.sidebar.title("Configurations")
 
-df = pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_rh0uXzokNtBHxDlXiSOCFSfCIa_TD8I7hNPUA4MUAFcxvk0oknFuyYKRWlC0IR26u59VMMWrThvn/pub?output=csv",index=False)
+df = pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_rh0uXzokNtBHxDlXiSOCFSfCIa_TD8I7hNPUA4MUAFcxvk0oknFuyYKRWlC0IR26u59VMMWrThvn/pub?output=csv")
 analyzer = mlscript(df)
 numeric_pipeline = analyzer.generate_pipeline("numeric")
 numerical_features = analyzer.store_features("numeric","number")
