@@ -9,3 +9,4 @@ CREATE TABLE userData(
     class INT,
     PRIMARY KEY(id)
 );
+

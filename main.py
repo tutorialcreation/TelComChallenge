@@ -1,12 +1,13 @@
 import streamlit as st
 import pandas as pd
+from models.db import DBOps
 from scripts.mlscript import mlscript
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 st.title("Telecommunication User Analytics")
 st.sidebar.title("Configurations")
 
-df = pd.read_csv("data/telcom.csv")
+df = pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_rh0uXzokNtBHxDlXiSOCFSfCIa_TD8I7hNPUA4MUAFcxvk0oknFuyYKRWlC0IR26u59VMMWrThvn/pub?output=csv",index=False)
 analyzer = mlscript(df)
 numeric_pipeline = analyzer.generate_pipeline("numeric")
 numerical_features = analyzer.store_features("numeric","number")
@@ -87,3 +88,13 @@ if option:
         st.pyplot(analysis_type_3)
     except Exception as e:
         st.error(e)
+
+
+st.sidebar.subheader("Satisfaction Analysis")
+top_x_satisfied = int(st.sidebar.text_input("Top x most satisfied customers",10))
+if top_x_satisfied:
+    db = DBOps(is_online=True)
+    satisfaction = pd.read_sql('SELECT * FROM userData', db.get_engine())
+    x_satisfied = satisfaction.sort_values(by="satisfaction_score",ascending=False).head(top_x_satisfied)
+    st.subheader(f"top {top_x_satisfied}  most satisfied customers")
+    st.dataframe(x_satisfied)
