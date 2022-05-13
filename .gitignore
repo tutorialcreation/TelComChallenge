@@ -6,6 +6,7 @@ dist/
 __pycache__/
 *.so
 *~
+.env
 !data/data.csv
 # due to using tox and pytest
 .tox
