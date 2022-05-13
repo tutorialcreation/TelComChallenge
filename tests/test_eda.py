@@ -19,11 +19,6 @@ class TestCases(unittest.TestCase):
         """
         self.assertTrue(self.numeric_pipeline)
     
-    # values = analyzer.top_x_column(10,"Handset Manufacturer","purple")
-    # fig,values = analyzer.top_x_column(10,"Handset Manufacturer","purple",online=True)
-    # values_ = analyzer.top_x_by_y_cols('Handset Manufacturer','Handset Type',3,5)
-    # aggregations = analyzer.aggregation_cols('MSISDN/Number','Total UL (Bytes)',True)
-    # analysis_1 = analyzer.non_graphical_analysis(numerical_features,"univariate",3)
     # analysis_2 = analyzer.graphical_analysis(numerical_features,"univariate","curve",x=1)
     # analysis_3 = analyzer.non_graphical_analysis(numerical_features,"multivariate",1,4)
     # analysis_4 = analyzer.pca_analysis(numerical_features,"numeric",10,49,1)
@@ -52,34 +47,43 @@ class TestCases(unittest.TestCase):
             test = False
         self.assertTrue(test)
 
-    # def test_store_features(self):
-    #     """
-    #     - testing store features
-    #     """
-    #     storage = self.analyzer.store_features("numeric","number")
-    #     self.assertTrue(storage)
+    def test_top_x_column(self):
+        """
+        - testing top_x_column
+        """
+        values = self.analyzer.top_x_column(10,"Handset Manufacturer","purple")
 
-    # def test_store_features(self):
-    #     """
-    #     - testing store features
-    #     """
-    #     storage = self.analyzer.store_features("numeric","number")
-    #     self.assertTrue(storage)
+        self.assertTrue(values)
 
-    # def test_store_features(self):
-    #     """
-    #     - testing store features
-    #     """
-    #     storage = self.analyzer.store_features("numeric","number")
-    #     self.assertTrue(storage)
+    def test_top_x_by_y_cols(self):
+        """
+        - testing store features
+        """
+        values_ = self.analyzer.top_x_by_y_cols('Handset Manufacturer','Handset Type',3,5)
+    
+        self.assertTrue(values_)
 
-    # def test_store_features(self):
-    #     """
-    #     - testing store features
-    #     """
-    #     storage = self.analyzer.store_features("numeric","number")
-    #     self.assertTrue(storage)
+    def test_aggregation_cols(self):
+        """
+        - testing aggregation_cols
+        """
+        test=True
+        aggregations = self.analyzer.aggregation_cols('MSISDN/Number','Total UL (Bytes)',True)
+        if aggregations.empty:
+            test = False
+        self.assertTrue(test)
 
+    def test_non_graphical_analysis(self):
+        """
+        - testing non_graphical_analysis
+        """
+        test = True
+        analysis_1 = self.analyzer.non_graphical_analysis(self.numerical_features,"univariate",3)
+        if analysis_1.empty:
+            test = False
+        self.assertTrue(test)
+
+        
     # def test_store_features(self):
     #     """
     #     - testing store features
