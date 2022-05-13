@@ -28,11 +28,11 @@ pd.options.mode.chained_assignment = None
 import seaborn as sns
 
 
-class EDA:
+class mlscript:
 
     """
     This program/script performs the following
-    - eda analysis of the data
+    - mlscript analysis of the data
     """
 
     def __init__(self,df):
@@ -359,6 +359,7 @@ class EDA:
                 pca_test_results, pca_test = self.setup_pca(test, no)
                 names_pcas = [f"PCA Component {i}" for i in range(1, 11, 1)]
                 scree = pd.DataFrame(list(zip(names_pcas, pca_train.explained_variance_ratio_)), columns=["Component", "Explained Variance Ratio"])
+                numerical_features = self.store_features("numeric","number")
                 d = {'PCA':pca_train.components_[component], 'Variable Names':numerical_features[:x_]}
                 df = pd.DataFrame(dict([ (k,pd.Series(v)) for k,v in d.items() ]))
                 df = df.sort_values('PCA', ascending=False)
@@ -412,20 +413,4 @@ class EDA:
 
 
 if __name__=="__main__":
-    df = pd.read_csv("../data/telcom.csv")
-    analyzer = EDA(df)
-    numeric_pipeline = analyzer.generate_pipeline("numeric")
-    numerical_features = analyzer.store_features("numeric","number")
-    numeric_transformation = analyzer.generate_transformation(numeric_pipeline,"numeric","number")
-    numeric_df = analyzer.frame_transforms(numeric_transformation,numerical_features)
-    values = analyzer.top_x_column(10,"Handset Manufacturer","purple")
-    fig,values = analyzer.top_x_column(10,"Handset Manufacturer","purple",online=True)
-    values_ = analyzer.top_x_by_y_cols('Handset Manufacturer','Handset Type',3,5)
-    aggregations = analyzer.aggregation_cols('MSISDN/Number','Total UL (Bytes)',True)
-    analysis_1 = analyzer.non_graphical_analysis(numerical_features,"univariate",3)
-    analysis_2 = analyzer.graphical_analysis(numerical_features,"univariate","curve",x=1)
-    analysis_3 = analyzer.non_graphical_analysis(numerical_features,"multivariate",1,4)
-    analysis_4 = analyzer.pca_analysis(numerical_features,"numeric",10,49,1)
-    analysis_5 = analyzer.categorize_based_on_deciles(numerical_features,49)
-    print(fig)
-
+    print('tests are in test_mlscript script')

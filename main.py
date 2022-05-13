@@ -1,13 +1,13 @@
 import streamlit as st
 import pandas as pd
-from scripts.eda import EDA
+from scripts.mlscript import mlscript
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 st.title("Telecommunication User Analytics")
 st.sidebar.title("Configurations")
 
 df = pd.read_csv("data/telcom.csv")
-analyzer = EDA(df)
+analyzer = mlscript(df)
 numeric_pipeline = analyzer.generate_pipeline("numeric")
 numerical_features = analyzer.store_features("numeric","number")
 categorical_features = analyzer.store_features("categorical","number")
