@@ -12,8 +12,7 @@ jobs:
     - name: cml_run
       run: |
         pip install -r requirements.txt
-        python scripts/script.py
-
+        
     - name: run-tests
       run: |
         python -m unittest tests.test_eda
