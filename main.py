@@ -127,10 +127,6 @@ app_df['total_data'] = df['Total UL (Bytes)'] + df['Total DL (Bytes)']
 
 top_x_duration = int(st.sidebar.text_input("find top x customers based on duration",10))
 
-# if top_x_duration:
-#     duration_aggregation = analyzer.aggregation_cols(app_df,'customer','duration')
-#     top_customers_duration = duration_aggregation.sort_values(by='duration_max', ascending=False)
-#     st.write(top_customers_duration)
 
 st.sidebar.text("Cluster data based on durations, sesssions, and ")
 df_to_transform = app_df[app_df.columns.to_list()[1:]]
@@ -155,10 +151,6 @@ for i in labels_:
     plt.scatter(df_[y_pred == i , 0] , df_[y_pred == i , 1] , label = i)
 plt.legend()
 plt.show()
-
-
-
-
 
 st.sidebar.subheader("Satisfaction Analysis")
 top_x_satisfied = int(st.sidebar.text_input("Top x most satisfied customers",10))
