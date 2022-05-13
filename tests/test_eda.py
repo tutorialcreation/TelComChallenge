@@ -6,9 +6,8 @@ from scripts.eda import EDA
 
 
 class TestCases(unittest.TestCase):
-
-    def __init__(self):
-        self.df = pd.read_csv("../data/data.csv")
+    
+    df = pd.read_csv("data/data.csv")
 
     def test_generate_pipeline(self):
         """
