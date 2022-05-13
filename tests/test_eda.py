@@ -9,17 +9,16 @@ class TestCases(unittest.TestCase):
     
     df = pd.read_csv("data/data.csv")
     analyzer = EDA(df)
-
+    numeric_pipeline = analyzer.generate_pipeline("numeric")
+    numeric_transformation =  analyzer.generate_transformation(numeric_pipeline,"numeric","number")
+    numerical_features = analyzer.store_features("numeric","number")
+    
     def test_generate_pipeline(self):
         """
         Test that eda generates a pipeline
         """
-        numeric_pipeline = self.analyzer.generate_pipeline("numeric")
-        self.assertTrue(numeric_pipeline)
+        self.assertTrue(self.numeric_pipeline)
     
-    # numerical_features = analyzer.store_features("numeric","number")
-    # numeric_transformation = analyzer.generate_transformation(numeric_pipeline,"numeric","number")
-    # numeric_df = analyzer.frame_transforms(numeric_transformation,numerical_features)
     # values = analyzer.top_x_column(10,"Handset Manufacturer","purple")
     # fig,values = analyzer.top_x_column(10,"Handset Manufacturer","purple",online=True)
     # values_ = analyzer.top_x_by_y_cols('Handset Manufacturer','Handset Type',3,5)
@@ -34,8 +33,80 @@ class TestCases(unittest.TestCase):
         """
         - testing store features
         """
-        numeric_pipeline = self.analyzer.store_features("numeric","number")
-        self.assertTrue(numeric_pipeline)
+        
+        self.assertTrue(self.numerical_features)
+
+    def test_generate_transformations(self):
+        """
+        - testing generating transforms
+        """
+        self.assertTrue(self.numeric_transformation.any())
+    
+    def test_frame_transforms(self):
+        """
+        - testing frame_transforms
+        """
+        test = True
+        numeric_df = self.analyzer.frame_transforms(self.numeric_transformation,self.numerical_features)
+        if numeric_df.empty:
+            test = False
+        self.assertTrue(test)
+
+    # def test_store_features(self):
+    #     """
+    #     - testing store features
+    #     """
+    #     storage = self.analyzer.store_features("numeric","number")
+    #     self.assertTrue(storage)
+
+    # def test_store_features(self):
+    #     """
+    #     - testing store features
+    #     """
+    #     storage = self.analyzer.store_features("numeric","number")
+    #     self.assertTrue(storage)
+
+    # def test_store_features(self):
+    #     """
+    #     - testing store features
+    #     """
+    #     storage = self.analyzer.store_features("numeric","number")
+    #     self.assertTrue(storage)
+
+    # def test_store_features(self):
+    #     """
+    #     - testing store features
+    #     """
+    #     storage = self.analyzer.store_features("numeric","number")
+    #     self.assertTrue(storage)
+
+    # def test_store_features(self):
+    #     """
+    #     - testing store features
+    #     """
+    #     storage = self.analyzer.store_features("numeric","number")
+    #     self.assertTrue(storage)
+
+    # def test_store_features(self):
+    #     """
+    #     - testing store features
+    #     """
+    #     storage = self.analyzer.store_features("numeric","number")
+    #     self.assertTrue(storage)
+
+    # def test_store_features(self):
+    #     """
+    #     - testing store features
+    #     """
+    #     storage = self.analyzer.store_features("numeric","number")
+    #     self.assertTrue(storage)
+
+    # def test_store_features(self):
+    #     """
+    #     - testing store features
+    #     """
+    #     storage = self.analyzer.store_features("numeric","number")
+    #     self.assertTrue(storage)
 
     
     
