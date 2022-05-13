@@ -2,20 +2,20 @@ import unittest
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..')))
 import pandas as pd
-from scripts.eda import EDA
+from scripts.mlscript import mlscript
 
 
 class TestCases(unittest.TestCase):
     
     df = pd.read_csv("data/data.csv")
-    analyzer = EDA(df)
+    analyzer = mlscript(df)
     numeric_pipeline = analyzer.generate_pipeline("numeric")
     numeric_transformation =  analyzer.generate_transformation(numeric_pipeline,"numeric","number")
     numerical_features = analyzer.store_features("numeric","number")
     
     def test_generate_pipeline(self):
         """
-        Test that eda generates a pipeline
+        Test that mlscript generates a pipeline
         """
         self.assertTrue(self.numeric_pipeline)
     

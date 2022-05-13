@@ -28,11 +28,11 @@ pd.options.mode.chained_assignment = None
 import seaborn as sns
 
 
-class EDA:
+class mlscript:
 
     """
     This program/script performs the following
-    - eda analysis of the data
+    - mlscript analysis of the data
     """
 
     def __init__(self,df):
@@ -413,4 +413,4 @@ class EDA:
 
 
 if __name__=="__main__":
-    print('tests are in test_eda script')
+    print('tests are in test_mlscript script')
