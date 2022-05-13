@@ -87,3 +87,12 @@ if option:
         st.pyplot(analysis_type_3)
     except Exception as e:
         st.error(e)
+
+
+st.sidebar.subheader("Satisfaction Analysis")
+top_x_satisfied = int(st.sidebar.text_input("Top x most satisfied customers",10))
+if top_x_satisfied:
+    satisfaction = pd.read_csv("data/satisfaction.csv")
+    x_satisfied = satisfaction.sort_values(by="satisfaction_score",ascending=False).head(top_x_satisfied)
+    st.subheader(f"top {top_x_satisfied}  most satisfied customers")
+    st.dataframe(x_satisfied)
