@@ -2,6 +2,28 @@ import streamlit as st
 import pandas as pd
 from models.db import DBOps
 from scripts.mlscript import mlscript
+import warnings
+from xml.etree.ElementInclude import include
+warnings.filterwarnings('ignore')
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.decomposition import PCA
+from statistics import mean
+import numpy as np
+import statsmodels.api as sm
+from sklearn.metrics.pairwise import euclidean_distances
+from sklearn.cluster import KMeans
+
+import matplotlib
+plt.style.use('ggplot')
+
+matplotlib.rcParams['figure.figsize'] = (12,8)
+
+pd.options.mode.chained_assignment = None
+
+import seaborn as sns
+
+
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 st.title("Telecommunication User Analytics")
@@ -105,12 +127,34 @@ app_df['total_data'] = df['Total UL (Bytes)'] + df['Total DL (Bytes)']
 
 top_x_duration = int(st.sidebar.text_input("find top x customers based on duration",10))
 
-if top_x_duration:
-    duration_aggregation = analyzer.aggregation_cols(app_df,'customer','duration')
-    top_customers_duration = duration_aggregation.sort_values(by='duration_max', ascending=False)
-    st.dataframe(top_customers_duration.head(10))
+# if top_x_duration:
+#     duration_aggregation = analyzer.aggregation_cols(app_df,'customer','duration')
+#     top_customers_duration = duration_aggregation.sort_values(by='duration_max', ascending=False)
+#     st.write(top_customers_duration)
+
+st.sidebar.text("Cluster data based on durations, sesssions, and ")
+df_to_transform = app_df[app_df.columns.to_list()[1:]]
+_,df_to_transform = analyzer.handle_missing_values_numeric(df_to_transform,df_to_transform.columns)
+pca = PCA(2)
 
 
+#Transform the data
+df_ = pca.fit_transform(df_to_transform)
+ 
+no_clusters = int(st.sidebar.text_input("Place the number of clusters",2))
+
+
+kmeans = KMeans(init="random",n_clusters=3,n_init=10,max_iter=300,random_state=42)
+y_pred = kmeans.fit_predict(df_)
+app_df['y_pred'] = y_pred
+labels_ = np.unique(y_pred)
+ 
+#plotting the results:
+ 
+for i in labels_:
+    plt.scatter(df_[y_pred == i , 0] , df_[y_pred == i , 1] , label = i)
+plt.legend()
+plt.show()
 
 
 
