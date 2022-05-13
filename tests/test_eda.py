@@ -53,7 +53,7 @@ class TestCases(unittest.TestCase):
 
     def test_top_x_by_y_cols(self):
         """
-        - testing store features
+        - testing top_x_by_y_cols
         """
         values_ = self.analyzer.top_x_by_y_cols('Handset Manufacturer','Handset Type',3,5)
     
