@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from models.db import DBOps
 from scripts.mlscript import mlscript
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
@@ -92,7 +93,8 @@ if option:
 st.sidebar.subheader("Satisfaction Analysis")
 top_x_satisfied = int(st.sidebar.text_input("Top x most satisfied customers",10))
 if top_x_satisfied:
-    satisfaction = pd.read_csv("data/satisfaction.csv")
+    db = DBOps(is_online=True)
+    satisfaction = pd.read_sql('SELECT * FROM userData', db.get_engine())
     x_satisfied = satisfaction.sort_values(by="satisfaction_score",ascending=False).head(top_x_satisfied)
     st.subheader(f"top {top_x_satisfied}  most satisfied customers")
     st.dataframe(x_satisfied)
