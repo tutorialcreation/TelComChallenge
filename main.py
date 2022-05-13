@@ -90,6 +90,32 @@ if option:
         st.error(e)
 
 
+st.sidebar.subheader("Modeling")
+app_df = pd.DataFrame({'customer':df['MSISDN/Number'],
+                      'sessions_frequency':df['Bearer Id'],
+                      'duration':df['Dur. (ms)']})
+app_df['social_media_data'] = df['Social Media DL (Bytes)'] + df['Social Media UL (Bytes)']
+app_df['google_data'] = df['Google DL (Bytes)'] + df['Google UL (Bytes)'] 
+app_df['email_data'] = df['Email DL (Bytes)'] + df['Email UL (Bytes)'] 
+app_df['youtube_data'] = df['Youtube DL (Bytes)'] + df['Youtube UL (Bytes)']
+app_df['netflix_data'] = df['Netflix DL (Bytes)'] + df['Netflix UL (Bytes)']
+app_df['gaming_data'] = df['Gaming DL (Bytes)'] + df['Gaming UL (Bytes)'] 
+app_df['other_data'] = df['Other DL (Bytes)'] + df['Other UL (Bytes)']
+app_df['total_data'] = df['Total UL (Bytes)'] + df['Total DL (Bytes)']
+
+top_x_duration = int(st.sidebar.text_input("find top x customers based on duration",10))
+
+if top_x_duration:
+    duration_aggregation = analyzer.aggregation_cols(app_df,'customer','duration')
+    top_customers_duration = duration_aggregation.sort_values(by='duration_max', ascending=False)
+    st.dataframe(top_customers_duration.head(10))
+
+
+
+
+
+
+
 st.sidebar.subheader("Satisfaction Analysis")
 top_x_satisfied = int(st.sidebar.text_input("Top x most satisfied customers",10))
 if top_x_satisfied:
