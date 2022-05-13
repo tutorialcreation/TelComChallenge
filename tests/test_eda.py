@@ -19,11 +19,7 @@ class TestCases(unittest.TestCase):
         """
         self.assertTrue(self.numeric_pipeline)
     
-    # analysis_2 = analyzer.graphical_analysis(numerical_features,"univariate","curve",x=1)
-    # analysis_3 = analyzer.non_graphical_analysis(numerical_features,"multivariate",1,4)
-    # analysis_4 = analyzer.pca_analysis(numerical_features,"numeric",10,49,1)
-    # analysis_5 = analyzer.categorize_based_on_deciles(numerical_features,49)
-
+    
     def test_store_features(self):
         """
         - testing store features
@@ -84,33 +80,15 @@ class TestCases(unittest.TestCase):
         self.assertTrue(test)
 
         
-    # def test_store_features(self):
-    #     """
-    #     - testing store features
-    #     """
-    #     storage = self.analyzer.store_features("numeric","number")
-    #     self.assertTrue(storage)
-
-    # def test_store_features(self):
-    #     """
-    #     - testing store features
-    #     """
-    #     storage = self.analyzer.store_features("numeric","number")
-    #     self.assertTrue(storage)
-
-    # def test_store_features(self):
-    #     """
-    #     - testing store features
-    #     """
-    #     storage = self.analyzer.store_features("numeric","number")
-    #     self.assertTrue(storage)
-
-    # def test_store_features(self):
-    #     """
-    #     - testing store features
-    #     """
-    #     storage = self.analyzer.store_features("numeric","number")
-    #     self.assertTrue(storage)
+    def test_pca_analysis(self):
+        """
+        - testing pca_analysis
+        """
+        test = True
+        analysis_4 = self.analyzer.pca_analysis(self.numerical_features,"numeric",5,49,1)
+        if analysis_4.empty:
+            test = False
+        self.assertTrue(test)
 
     
     
