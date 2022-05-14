@@ -130,7 +130,8 @@ top_x_duration = int(st.sidebar.text_input("find top x customers based on durati
 
 st.sidebar.text("Cluster data based on durations, sesssions, and ")
 df_to_transform = app_df[app_df.columns.to_list()[1:]]
-_,df_to_transform = analyzer.handle_missing_values_numeric(df_to_transform,df_to_transform.columns)
+_,df_to_transform = analyzer.handle_missing_values_numeric(df_to_transform.columns)
+application_transformation = analyzer.generate_transformation(experience_pipeline,df_to_transform,"numeric","number")
 pca = PCA(2)
 
 
@@ -141,7 +142,7 @@ no_clusters = int(st.sidebar.text_input("Place the number of clusters",2))
 
 
 kmeans = KMeans(init="random",n_clusters=3,n_init=10,max_iter=300,random_state=42)
-y_pred = kmeans.fit_predict(df_)
+y_pred = kmeans.fit_predict(application_transformation)
 app_df['y_pred'] = y_pred
 labels_ = np.unique(y_pred)
  
