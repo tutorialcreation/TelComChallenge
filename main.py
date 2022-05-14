@@ -181,7 +181,8 @@ st.subheader("cluster analysis")
 for i in labels_:
     fig_2,ax = plt.subplots()
     ax.scatter(df_[y_pred == i , 0] , df_[y_pred == i , 1] , label = i)
-    st.pyplot(fig_2)
+
+st.pyplot(fig_2)
 
 st.sidebar.subheader("Satisfaction Analysis")
 top_x_satisfied = int(st.sidebar.text_input("Top x most satisfied customers",10))
