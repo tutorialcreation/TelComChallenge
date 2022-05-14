@@ -85,33 +85,7 @@ if type_ and numeric_variable_:
     
     st.write(analysis_type_1)
 
-"""
-- PCA analysis
-"""
 
-st.sidebar.subheader("PCA Analysis")
-components = int(st.sidebar.text_input("no. of components",10))
-component_return = int(st.sidebar.text_input("return which component",1))
-if components:
-    try:
-        analysis_type_2 = analyzer.pca_analysis(numerical_features,"numeric",components,numeric_variable_,component_return)
-        st.subheader("PCA Analysis")
-        st.write(analysis_type_2)
-    except Exception as e:
-        st.error(e)
-
-if st.sidebar.checkbox("check out pca analysis heatmap?"):
-    pca_out = PCA().fit(numeric_df)
-    loadings = pca_out.components_
-    num_pc = pca_out.n_features_
-    pc_list = ["PC"+str(i) for i in list(range(1, num_pc+1))]
-    loadings_df = pd.DataFrame.from_dict(dict(zip(pc_list, loadings)))
-    loadings_df['variable'] = numeric_df.columns.values
-    loadings_df = loadings_df.set_index('variable')
-    fig_1, ax = plt.subplots()
-    ax = sns.heatmap(loadings_df, annot=True, cmap='Spectral')
-    st.pyplot(ax)
-    plt.show()
 
 st.sidebar.subheader("Measures of dispersion")
 
@@ -135,7 +109,7 @@ if option:
         st.error(e)
 
 
-st.sidebar.subheader("Engagement and Experience Analysis")
+
 app_df = pd.DataFrame({'customer':df['MSISDN/Number'],
                       'sessions_frequency':df['Bearer Id'],
                       'duration':df['Dur. (ms)']})
@@ -148,12 +122,40 @@ app_df['gaming_data'] = df['Gaming DL (Bytes)'] + df['Gaming UL (Bytes)']
 app_df['other_data'] = df['Other DL (Bytes)'] + df['Other UL (Bytes)']
 app_df['total_data'] = df['Total UL (Bytes)'] + df['Total DL (Bytes)']
 
-top_x_duration = int(st.sidebar.text_input("find top x customers based on duration",10))
+"""
+- PCA analysis
+"""
 
+st.sidebar.subheader("PCA Analysis")
+components = int(st.sidebar.text_input("no. of components",10))
+component_return = int(st.sidebar.text_input("return which component",1))
+if components:
+    try:
+        analysis_type_2 = analyzer.pca_analysis(numerical_features,"numeric",components,numeric_variable_,component_return)
+        st.subheader("PCA Analysis")
+        st.write(analysis_type_2)
+    except Exception as e:
+        st.error(e)
+
+if st.sidebar.checkbox("check out pca analysis heatmap?"):
+    pca_out = PCA().fit(app_df)
+    loadings = pca_out.components_
+    num_pc = pca_out.n_features_
+    pc_list = ["PC"+str(i) for i in list(range(1, num_pc+1))]
+    loadings_df = pd.DataFrame.from_dict(dict(zip(pc_list, loadings)))
+    loadings_df['variable'] = app_df.columns.values
+    loadings_df = loadings_df.set_index('variable')
+    fig_1, ax = plt.subplots()
+    ax = sns.heatmap(loadings_df, annot=True, cmap='Spectral')
+    st.pyplot(fig_1)
+    plt.show()
+
+st.sidebar.subheader("Engagement and Experience Analysis")
+top_x_duration = int(st.sidebar.text_input("find top x customers based on duration",10))
 
 st.sidebar.text("Cluster data based on durations, sesssions, and ")
 df_to_transform = app_df[app_df.columns.to_list()[1:]]
-application_transformation = analyzer.generate_transformation(numeric_pipeline,df_to_transform,"numeric","number")
+application_transformation = analyzer.generate_transformation(numeric_pipeline,"numeric","number")
 pca = PCA(2)
 
 
