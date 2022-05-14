@@ -85,6 +85,10 @@ if type_ and numeric_variable_:
     
     st.write(analysis_type_1)
 
+"""
+- PCA analysis
+"""
+
 st.sidebar.subheader("PCA Analysis")
 components = int(st.sidebar.text_input("no. of components",10))
 component_return = int(st.sidebar.text_input("return which component",1))
