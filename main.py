@@ -29,6 +29,10 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 st.title("Telecommunication User Analytics")
 st.sidebar.title("Configurations")
 
+"""
+Data preprocessing
+"""
+
 df = pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_rh0uXzokNtBHxDlXiSOCFSfCIa_TD8I7hNPUA4MUAFcxvk0oknFuyYKRWlC0IR26u59VMMWrThvn/pub?output=csv")
 analyzer = mlscript(df)
 numeric_pipeline = analyzer.generate_pipeline("numeric")
@@ -58,6 +62,9 @@ if top_x and categorical_variable_ and top_y:
     for i in values:
         st.dataframe([i])
 
+"""
+- EDA analysis
+"""
 st.sidebar.subheader("Measures of Central Tendency")
 if st.sidebar.checkbox("aggregate: min,max,mean based on two variables"):
     if numeric_variable and numeric_variable_1:
