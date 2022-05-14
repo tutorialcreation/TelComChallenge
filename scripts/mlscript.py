@@ -156,7 +156,7 @@ class mlscript:
 
     
 
-    def handle_missing_values_numeric(self, features):
+    def handle_missing_values_numeric(self, df=None, features):
         """
         this algorithm does the following
         - remove columns with x percentage of missing values
@@ -165,6 +165,8 @@ class mlscript:
             - df
             - percentage of missing values
         """
+        if not df:
+            df=self.df
         missing_percentage = round((self.df.isnull().sum().sum()/\
                 reduce(lambda x, y: x*y, self.df.shape))*100,2)
         for key in features:
