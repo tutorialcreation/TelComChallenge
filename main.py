@@ -29,6 +29,10 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 st.title("Telecommunication User Analytics")
 st.sidebar.title("Configurations")
 
+"""
+Data preprocessing
+"""
+
 df = pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_rh0uXzokNtBHxDlXiSOCFSfCIa_TD8I7hNPUA4MUAFcxvk0oknFuyYKRWlC0IR26u59VMMWrThvn/pub?output=csv")
 analyzer = mlscript(df)
 numeric_pipeline = analyzer.generate_pipeline("numeric")
@@ -58,6 +62,9 @@ if top_x and categorical_variable_ and top_y:
     for i in values:
         st.dataframe([i])
 
+"""
+- EDA analysis
+"""
 st.sidebar.subheader("Measures of Central Tendency")
 if st.sidebar.checkbox("aggregate: min,max,mean based on two variables"):
     if numeric_variable and numeric_variable_1:
@@ -78,16 +85,6 @@ if type_ and numeric_variable_:
     
     st.write(analysis_type_1)
 
-st.sidebar.subheader("PCA Analysis")
-components = int(st.sidebar.text_input("no. of components",10))
-component_return = int(st.sidebar.text_input("return which component",1))
-if components:
-    try:
-        analysis_type_2 = analyzer.pca_analysis(numerical_features,"numeric",components,numeric_variable_,component_return)
-        st.subheader("PCA Analysis")
-        st.write(analysis_type_2)
-    except Exception as e:
-        st.error(e)
 
 
 st.sidebar.subheader("Measures of dispersion")
@@ -112,7 +109,7 @@ if option:
         st.error(e)
 
 
-st.sidebar.subheader("Modeling")
+
 app_df = pd.DataFrame({'customer':df['MSISDN/Number'],
                       'sessions_frequency':df['Bearer Id'],
                       'duration':df['Dur. (ms)']})
@@ -125,40 +122,76 @@ app_df['gaming_data'] = df['Gaming DL (Bytes)'] + df['Gaming UL (Bytes)']
 app_df['other_data'] = df['Other DL (Bytes)'] + df['Other UL (Bytes)']
 app_df['total_data'] = df['Total UL (Bytes)'] + df['Total DL (Bytes)']
 
+"""
+- PCA analysis
+"""
+
+st.sidebar.subheader("PCA Analysis")
+components = int(st.sidebar.text_input("no. of components",10))
+component_return = int(st.sidebar.text_input("return which component",1))
+if components:
+    try:
+        analysis_type_2 = analyzer.pca_analysis(numerical_features,"numeric",components,numeric_variable_,component_return)
+        st.subheader("PCA Analysis")
+        st.write(analysis_type_2)
+    except Exception as e:
+        st.error(e)
+
+df_to_transform = app_df[app_df.columns.to_list()[1:]]
+analyzer = mlscript(df_to_transform)
+numeric_pipeline = analyzer.generate_pipeline("numeric")
+numerical_features = analyzer.store_features("numeric","number")
+categorical_features = analyzer.store_features("categorical","number")
+numeric_transformation = analyzer.generate_transformation(numeric_pipeline,"numeric","number")
+numeric_df = analyzer.frame_transforms(numeric_transformation,numerical_features)
+
+if st.sidebar.checkbox("check out pca analysis heatmap?"):
+    pca_out = PCA().fit(numeric_df)
+    loadings = pca_out.components_
+    num_pc = pca_out.n_features_
+    pc_list = ["PC"+str(i) for i in list(range(1, num_pc+1))]
+    loadings_df = pd.DataFrame.from_dict(dict(zip(pc_list, loadings)))
+    loadings_df['variable'] = numeric_df.columns.values
+    loadings_df = loadings_df.set_index('variable')
+    fig_1, ax = plt.subplots()
+    ax = sns.heatmap(loadings_df, annot=True, cmap='Spectral')
+    st.pyplot(fig_1)
+    plt.show()
+
+st.sidebar.subheader("Engagement and Experience Analysis")
 top_x_duration = int(st.sidebar.text_input("find top x customers based on duration",10))
 
-# if top_x_duration:
-#     duration_aggregation = analyzer.aggregation_cols(app_df,'customer','duration')
-#     top_customers_duration = duration_aggregation.sort_values(by='duration_max', ascending=False)
-#     st.write(top_customers_duration)
-
 st.sidebar.text("Cluster data based on durations, sesssions, and ")
-df_to_transform = app_df[app_df.columns.to_list()[1:]]
-_,df_to_transform = analyzer.handle_missing_values_numeric(df_to_transform,df_to_transform.columns)
-pca = PCA(2)
+application_transformation = numeric_transformation
+
 
 
 #Transform the data
-df_ = pca.fit_transform(df_to_transform)
- 
 no_clusters = int(st.sidebar.text_input("Place the number of clusters",2))
+no_iterations = int(st.sidebar.text_input("Place the number of iterations",10))
+pca = PCA(2)
+experience_df_ = app_df[numerical_features]
 
+#Transform the data
+df_ = pca.fit_transform(numeric_transformation)
+ 
+df_.shape
 
-kmeans = KMeans(init="random",n_clusters=3,n_init=10,max_iter=300,random_state=42)
+kmeans = KMeans(init="random",n_clusters=no_clusters,n_init=10,max_iter=no_iterations,random_state=42)
 y_pred = kmeans.fit_predict(df_)
 app_df['y_pred'] = y_pred
+centroids = kmeans.cluster_centers_
 labels_ = np.unique(y_pred)
- 
-#plotting the results:
- 
+df_ = application_transformation
+st.subheader("cluster analysis")
+fig_2,ax = plt.subplots()
 for i in labels_:
-    plt.scatter(df_[y_pred == i , 0] , df_[y_pred == i , 1] , label = i)
-plt.legend()
+    ax.scatter(df_[y_pred == i , 0] , df_[y_pred == i , 1] , label = i,cmap="plasma",s = 10, alpha=.1)
+
+ax.scatter(centroids[:,0] , centroids[:,1] , s = 80, color = 'k')
 plt.show()
-
-
-
-
+ax.legend()
+st.pyplot(fig_2)
 
 st.sidebar.subheader("Satisfaction Analysis")
 top_x_satisfied = int(st.sidebar.text_input("Top x most satisfied customers",10))
