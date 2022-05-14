@@ -163,15 +163,21 @@ top_x_duration = int(st.sidebar.text_input("find top x customers based on durati
 
 st.sidebar.text("Cluster data based on durations, sesssions, and ")
 application_transformation = numeric_transformation
-pca = PCA(2)
+
 
 
 #Transform the data
 no_clusters = int(st.sidebar.text_input("Place the number of clusters",3))
+pca = PCA(6)
+experience_df_ = app_df[numerical_features]
 
+#Transform the data
+df_ = pca.fit_transform(numeric_transformation)
+ 
+df_.shape
 
-kmeans = KMeans(init="random",n_clusters=no_clusters,n_init=10,max_iter=300,random_state=42)
-y_pred = kmeans.fit_predict(application_transformation)
+kmeans = KMeans(init="random",n_clusters=no_clusters,n_init=10,max_iter=10,random_state=42)
+y_pred = kmeans.fit_predict(df_)
 app_df['y_pred'] = y_pred
 labels_ = np.unique(y_pred)
  
@@ -181,7 +187,10 @@ st.subheader("cluster analysis")
 for i in labels_:
     fig_2,ax = plt.subplots()
     ax.scatter(df_[y_pred == i , 0] , df_[y_pred == i , 1] , label = i)
-
+    plt.scatter(df_[y_pred == i , 0] , df_[y_pred == i , 1] , label = i)
+    
+plt.legend()
+plt.show()
 st.pyplot(fig_2)
 
 st.sidebar.subheader("Satisfaction Analysis")
