@@ -168,7 +168,7 @@ application_transformation = numeric_transformation
 
 #Transform the data
 no_clusters = int(st.sidebar.text_input("Place the number of clusters",3))
-pca = PCA(6)
+pca = PCA(2)
 experience_df_ = app_df[numerical_features]
 
 #Transform the data
@@ -179,18 +179,28 @@ df_.shape
 kmeans = KMeans(init="random",n_clusters=no_clusters,n_init=10,max_iter=10,random_state=42)
 y_pred = kmeans.fit_predict(df_)
 app_df['y_pred'] = y_pred
+centroids = kmeans.cluster_centers_
 labels_ = np.unique(y_pred)
  
 df_ = application_transformation
 #plotting the results:
 st.subheader("cluster analysis")
-for i in labels_:
-    fig_2,ax = plt.subplots()
-    ax.scatter(df_[y_pred == i , 0] , df_[y_pred == i , 1] , label = i)
-    plt.scatter(df_[y_pred == i , 0] , df_[y_pred == i , 1] , label = i)
+colors = ["green","red"]
+fig_2,ax = plt.subplots()
+# for i in labels_:
+
+#     # ax.scatter(df_[y_pred == i , 0] , df_[y_pred == i , 1] , label = i)
+#     ax.scatter(df_[y_pred == i , 0], df_[y_pred == i , 1], c=np.array(colors)[labels_], 
+#         s = 10, alpha=.1)
     
-plt.legend()
+# ax.scatter(df_[0], df_[1], c=clustering)
+ax.scatter(df_.iloc[:,0], df_.iloc[:,1], c=np.array(colors)[labels_], 
+    s = 10, alpha=.1)
+ax.scatter(centroids[:, 0], centroids[:, 1], marker = "x", s=150, 
+    linewidths = 5, zorder = 10, c=['green', 'red'])
 plt.show()
+    
+ax.legend()
 st.pyplot(fig_2)
 
 st.sidebar.subheader("Satisfaction Analysis")
