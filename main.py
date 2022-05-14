@@ -101,12 +101,12 @@ if components:
         st.error(e)
 
 if st.sidebar.checkbox("check out pca analysis heatmap?"):
-    pca_out = PCA().fit(df)
+    pca_out = PCA().fit(numeric_df)
     loadings = pca_out.components_
     num_pc = pca_out.n_features_
     pc_list = ["PC"+str(i) for i in list(range(1, num_pc+1))]
     loadings_df = pd.DataFrame.from_dict(dict(zip(pc_list, loadings)))
-    loadings_df['variable'] = df.columns.values
+    loadings_df['variable'] = numeric_df.columns.values
     loadings_df = loadings_df.set_index('variable')
     fig_1, ax = plt.subplots()
     ax = sns.heatmap(loadings_df, annot=True, cmap='Spectral')
@@ -153,7 +153,6 @@ top_x_duration = int(st.sidebar.text_input("find top x customers based on durati
 
 st.sidebar.text("Cluster data based on durations, sesssions, and ")
 df_to_transform = app_df[app_df.columns.to_list()[1:]]
-_,df_to_transform = analyzer.handle_missing_values_numeric(df_to_transform.columns)
 application_transformation = analyzer.generate_transformation(numeric_pipeline,df_to_transform,"numeric","number")
 pca = PCA(2)
 
