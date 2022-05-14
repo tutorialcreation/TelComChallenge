@@ -131,7 +131,7 @@ top_x_duration = int(st.sidebar.text_input("find top x customers based on durati
 st.sidebar.text("Cluster data based on durations, sesssions, and ")
 df_to_transform = app_df[app_df.columns.to_list()[1:]]
 _,df_to_transform = analyzer.handle_missing_values_numeric(df_to_transform.columns)
-application_transformation = analyzer.generate_transformation(experience_pipeline,df_to_transform,"numeric","number")
+application_transformation = analyzer.generate_transformation(numeric_pipeline,df_to_transform,"numeric","number")
 pca = PCA(2)
 
 
