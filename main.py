@@ -137,13 +137,21 @@ if components:
     except Exception as e:
         st.error(e)
 
+df_to_transform = app_df[app_df.columns.to_list()[1:]]
+analyzer = mlscript(df_to_transform)
+numeric_pipeline = analyzer.generate_pipeline("numeric")
+numerical_features = analyzer.store_features("numeric","number")
+categorical_features = analyzer.store_features("categorical","number")
+numeric_transformation = analyzer.generate_transformation(numeric_pipeline,"numeric","number")
+numeric_df = analyzer.frame_transforms(numeric_transformation,numerical_features)
+
 if st.sidebar.checkbox("check out pca analysis heatmap?"):
-    pca_out = PCA().fit(app_df)
+    pca_out = PCA().fit(numeric_df)
     loadings = pca_out.components_
     num_pc = pca_out.n_features_
     pc_list = ["PC"+str(i) for i in list(range(1, num_pc+1))]
     loadings_df = pd.DataFrame.from_dict(dict(zip(pc_list, loadings)))
-    loadings_df['variable'] = app_df.columns.values
+    loadings_df['variable'] = numeric_df.columns.values
     loadings_df = loadings_df.set_index('variable')
     fig_1, ax = plt.subplots()
     ax = sns.heatmap(loadings_df, annot=True, cmap='Spectral')
@@ -154,22 +162,20 @@ st.sidebar.subheader("Engagement and Experience Analysis")
 top_x_duration = int(st.sidebar.text_input("find top x customers based on duration",10))
 
 st.sidebar.text("Cluster data based on durations, sesssions, and ")
-df_to_transform = app_df[app_df.columns.to_list()[1:]]
-application_transformation = analyzer.generate_transformation(numeric_pipeline,"numeric","number")
+application_transformation = numeric_transformation
 pca = PCA(2)
 
 
 #Transform the data
-df_ = pca.fit_transform(df_to_transform)
- 
-no_clusters = int(st.sidebar.text_input("Place the number of clusters",2))
+no_clusters = int(st.sidebar.text_input("Place the number of clusters",3))
 
 
-kmeans = KMeans(init="random",n_clusters=3,n_init=10,max_iter=300,random_state=42)
+kmeans = KMeans(init="random",n_clusters=no_clusters,n_init=10,max_iter=300,random_state=42)
 y_pred = kmeans.fit_predict(application_transformation)
 app_df['y_pred'] = y_pred
 labels_ = np.unique(y_pred)
  
+df_ = application_transformation
 #plotting the results:
  
 for i in labels_:
