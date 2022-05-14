@@ -167,7 +167,7 @@ application_transformation = numeric_transformation
 
 
 #Transform the data
-no_clusters = int(st.sidebar.text_input("Place the number of clusters",3))
+no_clusters = int(st.sidebar.text_input("Place the number of clusters",2))
 pca = PCA(2)
 experience_df_ = app_df[numerical_features]
 
@@ -185,21 +185,11 @@ labels_ = np.unique(y_pred)
 df_ = application_transformation
 #plotting the results:
 st.subheader("cluster analysis")
-colors = ["green","red"]
 fig_2,ax = plt.subplots()
-# for i in labels_:
-
-#     # ax.scatter(df_[y_pred == i , 0] , df_[y_pred == i , 1] , label = i)
-#     ax.scatter(df_[y_pred == i , 0], df_[y_pred == i , 1], c=np.array(colors)[labels_], 
-#         s = 10, alpha=.1)
-    
-# ax.scatter(df_[0], df_[1], c=clustering)
-ax.scatter(df_.iloc[:,0], df_.iloc[:,1], c=np.array(colors)[labels_], 
-    s = 10, alpha=.1)
+ax.scatter(df_[0], df_[1], cmap="plasma",s = 10, alpha=.1)
 ax.scatter(centroids[:, 0], centroids[:, 1], marker = "x", s=150, 
     linewidths = 5, zorder = 10, c=['green', 'red'])
 plt.show()
-    
 ax.legend()
 st.pyplot(fig_2)
 
