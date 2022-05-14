@@ -100,7 +100,7 @@ if st.sidebar.checkbox("find deciles"):
 
 st.sidebar.subheader("Charts")
 option = st.sidebar.radio("What type of chart would you like to see?",
-("box","hist","curve","scatter"))
+("hist","box","curve","scatter"))
 if option:
     try:
         analysis_type_3 = analyzer.graphical_analysis(numerical_features,type_,option,x=int(numeric_variable_))
@@ -129,10 +129,10 @@ app_df['total_data'] = df['Total UL (Bytes)'] + df['Total DL (Bytes)']
 st.sidebar.subheader("PCA Analysis")
 components = int(st.sidebar.text_input("no. of components",10))
 component_return = int(st.sidebar.text_input("return which component",1))
-if components:
+st.subheader("PCA Analysis")
+if st.sidebar.checkbox("show chosen component"):
     try:
         analysis_type_2 = analyzer.pca_analysis(numerical_features,"numeric",components,numeric_variable_,component_return)
-        st.subheader("PCA Analysis")
         st.write(analysis_type_2)
     except Exception as e:
         st.error(e)
@@ -145,18 +145,17 @@ categorical_features = analyzer.store_features("categorical","number")
 numeric_transformation = analyzer.generate_transformation(numeric_pipeline,"numeric","number")
 numeric_df = analyzer.frame_transforms(numeric_transformation,numerical_features)
 
-if st.sidebar.checkbox("check out pca analysis heatmap?"):
-    pca_out = PCA().fit(numeric_df)
-    loadings = pca_out.components_
-    num_pc = pca_out.n_features_
-    pc_list = ["PC"+str(i) for i in list(range(1, num_pc+1))]
-    loadings_df = pd.DataFrame.from_dict(dict(zip(pc_list, loadings)))
-    loadings_df['variable'] = numeric_df.columns.values
-    loadings_df = loadings_df.set_index('variable')
-    fig_1, ax = plt.subplots()
-    ax = sns.heatmap(loadings_df, annot=True, cmap='Spectral')
-    st.pyplot(fig_1)
-    plt.show()
+pca_out = PCA().fit(numeric_df)
+loadings = pca_out.components_
+num_pc = pca_out.n_features_
+pc_list = ["PC"+str(i) for i in list(range(1, num_pc+1))]
+loadings_df = pd.DataFrame.from_dict(dict(zip(pc_list, loadings)))
+loadings_df['variable'] = numeric_df.columns.values
+loadings_df = loadings_df.set_index('variable')
+fig_1, ax = plt.subplots()
+ax = sns.heatmap(loadings_df, annot=True, cmap='Spectral')
+st.pyplot(fig_1)
+plt.show()
 
 st.sidebar.subheader("Engagement and Experience Analysis")
 top_x_duration = int(st.sidebar.text_input("find top x customers based on duration",10))
