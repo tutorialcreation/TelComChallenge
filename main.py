@@ -88,14 +88,19 @@ if components:
         st.write(analysis_type_2)
     except Exception as e:
         st.error(e)
-pca_out = PCA().fit(df)
-loadings = pca_out.components_
-num_pc = pca_out.n_features_
-pc_list = ["PC"+str(i) for i in list(range(1, num_pc+1))]
-loadings_df = pd.DataFrame.from_dict(dict(zip(pc_list, loadings)))
-loadings_df['variable'] = df.columns.values
-loadings_df = loadings_df.set_index('variable')
-loadings_df
+
+if st.sidebar.checkbox("check out pca analysis heatmap?"):
+    pca_out = PCA().fit(df)
+    loadings = pca_out.components_
+    num_pc = pca_out.n_features_
+    pc_list = ["PC"+str(i) for i in list(range(1, num_pc+1))]
+    loadings_df = pd.DataFrame.from_dict(dict(zip(pc_list, loadings)))
+    loadings_df['variable'] = df.columns.values
+    loadings_df = loadings_df.set_index('variable')
+    fig_1, ax = plt.subplots()
+    ax = sns.heatmap(loadings_df, annot=True, cmap='Spectral')
+    st.pyplot(ax)
+    plt.show()
 
 st.sidebar.subheader("Measures of dispersion")
 
