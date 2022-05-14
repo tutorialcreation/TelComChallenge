@@ -168,6 +168,7 @@ application_transformation = numeric_transformation
 
 #Transform the data
 no_clusters = int(st.sidebar.text_input("Place the number of clusters",2))
+no_iterations = int(st.sidebar.text_input("Place the number of iterations",10))
 pca = PCA(2)
 experience_df_ = app_df[numerical_features]
 
@@ -176,14 +177,12 @@ df_ = pca.fit_transform(numeric_transformation)
  
 df_.shape
 
-kmeans = KMeans(init="random",n_clusters=no_clusters,n_init=10,max_iter=10,random_state=42)
+kmeans = KMeans(init="random",n_clusters=no_clusters,n_init=10,max_iter=no_iterations,random_state=42)
 y_pred = kmeans.fit_predict(df_)
 app_df['y_pred'] = y_pred
 centroids = kmeans.cluster_centers_
 labels_ = np.unique(y_pred)
- 
 df_ = application_transformation
-#plotting the results:
 st.subheader("cluster analysis")
 fig_2,ax = plt.subplots()
 for i in labels_:
