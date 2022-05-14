@@ -112,7 +112,7 @@ if option:
         st.error(e)
 
 
-st.sidebar.subheader("Modeling")
+st.sidebar.subheader("Engagement and Experience Analysis")
 app_df = pd.DataFrame({'customer':df['MSISDN/Number'],
                       'sessions_frequency':df['Bearer Id'],
                       'duration':df['Dur. (ms)']})
@@ -149,9 +149,9 @@ labels_ = np.unique(y_pred)
 #plotting the results:
  
 for i in labels_:
-    plt.scatter(df_[y_pred == i , 0] , df_[y_pred == i , 1] , label = i)
-plt.legend()
-plt.show()
+    fig_2,ax = plt.subplots()
+    ax.scatter(df_[y_pred == i , 0] , df_[y_pred == i , 1] , label = i)
+st.pyplot(fig_2)
 
 st.sidebar.subheader("Satisfaction Analysis")
 top_x_satisfied = int(st.sidebar.text_input("Top x most satisfied customers",10))
