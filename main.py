@@ -138,7 +138,7 @@ if st.sidebar.checkbox("show chosen component"):
         st.error(e)
 
 df_to_transform = app_df[app_df.columns.to_list()[1:]]
-analyzer = Mlscript(df_to_transform)
+analyzer = mlscript(df_to_transform)
 numeric_pipeline = analyzer.generate_pipeline("numeric")
 numerical_features = analyzer.store_features("numeric","number")
 categorical_features = analyzer.store_features("categorical","number")
