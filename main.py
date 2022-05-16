@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from models.db import DBOps
-from scripts.mlscript import mlscript
+from scripts.mlscript import Mlscript
 import warnings
 from xml.etree.ElementInclude import include
 warnings.filterwarnings('ignore')
@@ -34,7 +34,7 @@ Data preprocessing
 """
 
 df = pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_rh0uXzokNtBHxDlXiSOCFSfCIa_TD8I7hNPUA4MUAFcxvk0oknFuyYKRWlC0IR26u59VMMWrThvn/pub?output=csv")
-analyzer = mlscript(df)
+analyzer = Mlscript(df)
 numeric_pipeline = analyzer.generate_pipeline("numeric")
 numerical_features = analyzer.store_features("numeric","number")
 categorical_features = analyzer.store_features("categorical","number")
@@ -138,7 +138,7 @@ if st.sidebar.checkbox("show chosen component"):
         st.error(e)
 
 df_to_transform = app_df[app_df.columns.to_list()[1:]]
-analyzer = mlscript(df_to_transform)
+analyzer = Mlscript(df_to_transform)
 numeric_pipeline = analyzer.generate_pipeline("numeric")
 numerical_features = analyzer.store_features("numeric","number")
 categorical_features = analyzer.store_features("categorical","number")
