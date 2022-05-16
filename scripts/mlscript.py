@@ -28,11 +28,11 @@ pd.options.mode.chained_assignment = None
 import seaborn as sns
 
 
-class mlscript:
+class Mlscript:
 
     """
     This program/script performs the following
-    - mlscript analysis of the data
+    - Mlscript analysis of the data
     """
 
     def __init__(self,df):
@@ -415,4 +415,4 @@ class mlscript:
 
 
 if __name__=="__main__":
-    print('tests are in test_mlscript script')
+    print('tests are in test_Mlscript script')
