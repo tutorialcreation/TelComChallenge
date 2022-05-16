@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from models.db import DBOps
-from scripts.Mlscript import Mlscript
+from scripts.mlscript import Mlscript
 import warnings
 from xml.etree.ElementInclude import include
 warnings.filterwarnings('ignore')

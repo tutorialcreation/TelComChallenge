@@ -2,7 +2,7 @@ import unittest
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..')))
 import pandas as pd
-from scripts.Mlscript import Mlscript
+from scripts.mlscript import Mlscript
 
 
 class TestCases(unittest.TestCase):
